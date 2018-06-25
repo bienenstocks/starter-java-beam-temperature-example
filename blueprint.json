@@ -28,7 +28,7 @@
     "generator-starterkit-eda-base": {
       "scope": "@eda",
       "registry": "https://na.artifactory.swg-devops.com/artifactory/api/npm/bmd-npm-virtual/",
-      "version": "0.1.3"
+      "version": "0.1.4"
     }
   },
   "requiredCapabilities": [ "streaming-analytics" ],
