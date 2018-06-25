@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~ Copyright (C) 2018 IBM Inc. ~ ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not ~ use this file except in compliance with the License. You
+may obtain a copy of ~ the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 ~ ~ Unless required by applicable law or agreed to in writing, software ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT ~ WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the ~ License for the specific language governing permissions and limitations under ~ the License. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ibm.streams.example</groupId>
+  <artifactId>example-starter-kit</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <name>IBM Streams Example</name>
+  <description>
+    Temperature example
+  </description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <beam.version>2.4.0</beam.version>
+    <streams.beamrunner.version>1.2.1</streams.beamrunner.version>
+    <java.version>1.8</java.version>
+    <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+    <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
+    <maven-shade-plugin.version>3.0.0</maven-shade-plugin.version>
+    <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+    <slf4j.version>1.7.25</slf4j.version>
+  </properties>
+
+  <!-- Temporary until StreamsRunner is published in Maven Central -->
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo.maven.apache.org/maven2</url>
+    </repository>
+    <repository>
+      <id>labs</id>
+      <url>https://git.ng.bluemix.net/ilanp/strmsbmrnr/raw/master/</url>
+    </repository>
+  </repositories>
+
+  <profiles>
+    <!-- DirectRunner profile for running in development -->
+    <profile>
+      <id>direct-runner</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.beam</groupId>
+          <artifactId>beam-runners-direct-java</artifactId>
+          <version>${beam.version}</version>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>${slf4j.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <!-- StreamsRunner profile for running in the Streaming Analytics service -->
+    <profile>
+      <id>streams-runner</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.ibm.streams.beam</groupId>
+          <artifactId>beam-distribution</artifactId>
+          <version>${streams.beamrunner.version}</version>
+          <type>tar.gz</type>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <configuration>
+              <additionalClasspathElements>
+                <additionalClasspathElement>
+                  target/dependency/com.ibm.streams.beam-${streams.beamrunner.version}/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar
+                </additionalClasspathElement>
+              </additionalClasspathElements>
+              <classpathScope>compile</classpathScope>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <!-- Common dependencies, regardless of runner -->
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-sdks-java-core</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.ibm.streams.beam</groupId>
+                  <artifactId>beam-distribution</artifactId>
+                  <version>${streams.beamrunner.version}</version>
+                  <includeTypes>tar.gz</includeTypes>
+                  <includeArtifactIds>beam-distribution</includeArtifactIds>
+                  <outputDirectory>target/product</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>${maven-shade-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>bundle-and-repackage</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadeTestJar>true</shadeTestJar>
+              <artifactSet>
+                <includes>
+                  <include>*:*</include>
+                </includes>
+                <excludes>
+                  <exclude>*:beam-distribution</exclude>
+                </excludes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-maven-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
