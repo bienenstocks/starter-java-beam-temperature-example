@@ -33,6 +33,5 @@
   },
   "requiredCapabilities": [ ],
   "servicePlans": {
-    "streamingAnalytics": "entry-container-lite"
   }
 }
