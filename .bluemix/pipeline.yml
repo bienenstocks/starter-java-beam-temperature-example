@@ -25,7 +25,7 @@ stages:
   - type: stage
   properties:
   - name: streaming_analytics_credentials
-    value: {{&config.creds}}
+    value: "test"
     type: text_area
   jobs:
   - name: Deploy flow
