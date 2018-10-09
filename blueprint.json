@@ -1,6 +1,5 @@
 {
   "appIconURL": "blueprint/streams.png",
-  "checklist": [],
   "description": "Temperature simulation that gets you up and running with Apache Beam and Streaming Analytics",
   "name": "Apache Beam Java temperature example",
   "previewURLs": [],
