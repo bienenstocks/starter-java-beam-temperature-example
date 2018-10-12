@@ -11,7 +11,7 @@
   "previewURLs": [],
   "type": "OTHER",
   "toolchain" : ["GENERIC"],
-  "tags":["eventdriven"],
+  "tags":["devex"],
   "thumbnailURL": "blueprint/webapp.svg",
   "email": "ilanp@il.ibm.com",
   "generators": {
