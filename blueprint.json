@@ -31,7 +31,7 @@
       "version": "0.1.26"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics" ],
+  "requiredCapabilities": [ "streamingAnalytics", "Object-Storage" ],
   "servicePlans": {
     "streamingAnalytics": "entry-container-lite"
   }
