@@ -34,6 +34,6 @@
   "requiredCapabilities": [ "streamingAnalytics", "cloudobjectstorage" ],
   "servicePlans": {
     "streamingAnalytics": "entry-container-lite",
-    "cloudobjectstorage":"cloudobjectstorageServicePlan"
+    "cloudobjectstorage":"lite"
   }
 }
