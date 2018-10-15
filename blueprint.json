@@ -31,9 +31,10 @@
       "version": "0.1.26"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics", "cloudobjectstorage" ],
+  "requiredCapabilities": [ "streamingAnalytics", "cloudobjectstorage", "messageHub" ],
   "servicePlans": {
     "streamingAnalytics": "entry-container-lite",
-    "cloudobjectstorage": "lite"
+    "cloudobjectstorage": "lite",
+    "messageHub": "standard"
   }
 }
