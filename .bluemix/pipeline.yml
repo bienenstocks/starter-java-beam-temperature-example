@@ -33,6 +33,12 @@ stages:
   - name: DEV_SPACE
     value: ${dev-space}
     type: text
+  - name: CF_SPACE
+    value: ${CF_SPACE}
+    type: text
+  - name: $REGION_ID
+    value: ${$REGION_ID}
+    type: text
   jobs:
   - name: Deploy flow
     type: deployer
@@ -43,7 +49,10 @@ stages:
       echo "dump apikey and env"
       echo "P_API_KEY: $PIPELINE_API_KEY"
       export A_API_KEY={{API_KEY}}
-      echo "API_KEY: A_API_KEY"
+      echo "API_KEY: $A_API_KEY"
+      echo "DEV SPACE $DEV_SPACE"
+      echo "CF SPACE $CF_SPACE"
+      echo "region $REGION_ID"
       env
 
       echo "generating vcap.json"
