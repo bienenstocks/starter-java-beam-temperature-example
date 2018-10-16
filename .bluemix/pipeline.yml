@@ -43,7 +43,6 @@ stages:
       echo "dump apikey and env"
       echo "P_API_KEY: $PIPELINE_API_KEY"
       export A_API_KEY={{API_KEY}}
-      export
       echo "API_KEY: A_API_KEY"
       env
 
