@@ -24,10 +24,6 @@
     "generator-git-starterkit-credentials-builder": {
       "scope": "@arf",
       "version": "0.x.x"
-    },
-    "generator-starterkit-content-downloader": {
-      "scope": "@arf",
-      "version": "0.x.x"
     }
   },
   "requiredCapabilities": [ "streamingAnalytics" ],
