@@ -17,7 +17,7 @@
   "generators": {
     "java": [
       "generator-git-starterkit-credentials-builder",
-      "generator-ibm-cloud-enablement"
+      "generator-starterkit-eda-base"
     ]
   },
   "generatorOptions": {
