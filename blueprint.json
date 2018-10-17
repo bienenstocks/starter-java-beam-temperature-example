@@ -15,8 +15,7 @@
   "thumbnailURL": "blueprint/webapp.svg",
   "email": "ilanp@il.ibm.com",
   "generators": {
-    "java": ["generator-git-starterkit-credentials-builder"],
-    "node": ["generator-starterkit-content-downloader"]
+    "java": ["generator-git-starterkit-credentials-builder", "generator-starterkit-content-downloader"]
   },
   "generatorOptions": {
     "generator-git-starterkit-credentials-builder": {
