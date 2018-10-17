@@ -17,7 +17,7 @@
   "generators": {
     "java": [
       "generator-git-starterkit-credentials-builder",
-      "generator-starterkit-content-downloader"
+      "@arf/generator-starterkit-content-downloader"
     ]
   },
   "generatorOptions": {
@@ -25,10 +25,9 @@
       "scope": "@arf",
       "version": "0.x.x"
     },
-    "generator-starterkit-eda-base": {
-      "scope": "@eda",
-      "registry": "https://na.artifactory.swg-devops.com/artifactory/api/npm/bmd-npm-virtual/",
-      "version": "0.1.26"
+    "generator-starterkit-content-downloader": {
+      "scope": "@arf",
+      "version": "0.x.x"
     }
   },
   "requiredCapabilities": [ "streamingAnalytics" ],
