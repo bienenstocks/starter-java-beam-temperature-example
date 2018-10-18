@@ -16,11 +16,15 @@
   "email": "ilanp@il.ibm.com",
   "generators": {
     "java": [
-      "generator-git-starterkit-credentials-builder"
+      "generator-git-starterkit-credentials-builder", "generator-starterkit-content-downloader"
     ]
   },
   "generatorOptions": {
     "generator-git-starterkit-credentials-builder": {
+      "scope": "@arf",
+      "version": "0.x.x"
+    },
+    "generator-starterkit-content-downloader": {
       "scope": "@arf",
       "version": "0.x.x"
     }
