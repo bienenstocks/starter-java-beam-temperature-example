@@ -16,19 +16,13 @@
   "email": "ilanp@il.ibm.com",
   "generators": {
     "java": [
-      "generator-git-starterkit-credentials-builder",
-      "generator-starterkit-eda-base"
+      "generator-git-starterkit-credentials-builder"
     ]
   },
   "generatorOptions": {
     "generator-git-starterkit-credentials-builder": {
       "scope": "@arf",
       "version": "0.x.x"
-    },
-    "generator-starterkit-eda-base": {
-      "scope": "@eda",
-      "registry": "https://na.artifactory.swg-devops.com/artifactory/api/npm/bmd-npm-virtual/",
-      "version": "0.1.26"
     }
   },
   "requiredCapabilities": [ "streamingAnalytics" ],
