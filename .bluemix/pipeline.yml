@@ -73,8 +73,3 @@ stages:
       --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
       --jobName={{name}}
     docker_image: maven:3.5.3-ibmjava
-hooks:
-- enabled: true
-  label: null
-  ssl_enabled: false
-  url: http://lms-api/v1/messaging/webhook/publish
