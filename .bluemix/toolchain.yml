@@ -51,7 +51,7 @@ form:
       $ref: deploy.json
     parameters:
       app-name: Mbladafsdfasdfy
-      api-key: "{{api-key}}"
-      dev-region: "{{region}}"
-      dev-space: "{{space}}"
-      dev-organization: "{{organization}}"
+      api-key: "Mbladafsdfasdfy"
+      dev-region: "Mbladafsdfasdfy"
+      dev-space: "Mbladafsdfasdfy"
+      dev-organization: "bladafsdfasdfy"
