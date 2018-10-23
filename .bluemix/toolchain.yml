@@ -15,7 +15,7 @@ services:
     service_id: hostedgit
     parameters:
       repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
-      repo_name: "{{tag toolchain.name}}"
+      repo_name: "{{tag 'toolchain.name'}}"
       type: clone
       has_issues: true
       enable_traceability: true
