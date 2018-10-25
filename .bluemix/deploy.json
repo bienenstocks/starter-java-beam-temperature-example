@@ -8,15 +8,15 @@
       "description": "IBM Cloud API keys contain permissions that grant access to organizations, spaces, and Kubernetes clusters. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
       "type": "string"
     },
-    "dev-region": {
+    "region": {
       "description": "The IBM Cloud region",
       "type": "string"
     },
-    "dev-organization": {
+    "organization": {
       "description": "The IBM Cloud org",
       "type": "string"
     },
-    "dev-space": {
+    "space": {
       "description": "The IBM Cloud space",
       "type": "string"
     },
@@ -25,7 +25,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", "dev-organization", "dev-space", "app-name"],  "form": [{
+  "required": ["region", "organization", "space", "app-name"],  "form": [{
      "type": "validator",
      "url": "/devops/setup/bm-helper/helper.html"
   },
@@ -46,13 +46,13 @@
     "widths": ["28%", "28%", "28%"],
     "items": [{
       "type": "select",
-      "key": "dev-region"
+      "key": "region"
     }, {
       "type": "select",
-      "key": "dev-organization"
+      "key": "organization"
     }, {
       "type": "select",
-      "key": "dev-space",
+      "key": "space",
       "readonly": false
     }]
   }]
