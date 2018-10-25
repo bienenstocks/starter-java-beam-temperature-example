@@ -26,9 +26,9 @@
     }
   },
   "required": ["dev-region", "dev-organization", "dev-space", "app-name"],  "form": [{
-  "type": "validator",
-  "url": "/devops/setup/bm-helper/helper.html"
-},
+     "type": "validator",
+     "url": "/devops/setup/bm-helper/helper.html"
+  },
   {
     "type": "password",
     "readonly": false,
@@ -45,15 +45,6 @@
     "columnCount": 3,
     "widths": ["28%", "28%", "28%"],
     "items": [{
-      "type": "label",
-      "title": "Region"
-    }, {
-      "type": "label",
-      "title": "Organization"
-    }, {
-      "type": "label",
-      "title": "Space"
-    }, {
       "type": "select",
       "key": "dev-region"
     }, {
