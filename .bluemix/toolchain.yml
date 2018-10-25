@@ -49,9 +49,5 @@ form:
   pipeline:
     parameters:
       app-name: {{name}}
-      api-key: "{{tag 'api-key'}}"
-      dev-region: "{{tag 'dev-region'}}"
-      dev-space: "{{tag 'dev-space'}}"
-      dev-organization: "{{tag 'dev-organization'}}"
     schema:
       $ref: deploy.json
