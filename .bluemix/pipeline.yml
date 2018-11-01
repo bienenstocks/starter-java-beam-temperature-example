@@ -39,22 +39,24 @@ stages:
     script: |
       #!/bin/bash
 
-      echo "dump apikey and env"
-      echo "P_API_KEY: $PIPELINE_API_KEY"
-      export A_API_KEY={{API_KEY}}
-      echo "API_KEY: $A_API_KEY"
-      echo "DEV SPACE $P_DEV_SPACE"
-      echo "CF SPACE $P_CF_SPACE"
-      echo "region $P_REGION_ID"
-      env
+      if ! [ -x "$(command -v bx)" ]; then
+        curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+      fi
+
+      # TODO : how to know which env to use ?
+      bx login --apikey $API_KEY -a https://api.stage1.ng.bluemix.net
+
+      SA_KEY=$(bx resource service-key-create my-service-key Administrator --instance-name "${streaming-analytics}")
 
       echo "generating vcap.json"
-      echo "{
-        \"streaming-analytics\":[{
-          \"name\" : \"streaming-analytics\",
-          \"credentials\" : $streaming_analytics_credentials
-        }]
-      }" > vcap.json
+            echo "{
+              \"streaming-analytics\":[{
+                \"name\" : ${SA_NAME},
+                \"credentials\" : {
+                    \"apiKey\": $(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }'),
+                    \"v2_rest_url\": $(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')
+              }]
+            }" > vcap.json
 
       java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
       com.ibm.streams.beam.sample.temperature.TemperatureSample \
