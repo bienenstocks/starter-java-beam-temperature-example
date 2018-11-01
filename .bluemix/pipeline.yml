@@ -24,9 +24,11 @@ stages:
   triggers:
   - type: stage
   properties:
-  - name: streaming_analytics_credentials
-    value: "test"
-    type: text_area
+  {{#each config.creds}}
+  - name: {{@key}}
+    value: {{{this}}}
+    type: text
+  {{/each}}
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
     type: text
