@@ -11,7 +11,7 @@
   "previewURLs": [],
   "type": "OTHER",
   "toolchain" : ["GENERIC"],
-  "tags":["streams"],
+  "tags":["devex", "eventdriven"],
   "thumbnailURL": "blueprint/webapp.svg",
   "email": "ilanp@il.ibm.com",
   "generators": {
@@ -28,11 +28,12 @@
     "generator-starterkit-eda-base": {
       "scope": "@eda",
       "registry": "https://na.artifactory.swg-devops.com/artifactory/api/npm/bmd-npm-virtual/",
-      "version": "0.1.19"
+      "version": "0.x.x"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics" ],
+  "requiredCapabilities": [ "streamingAnalytics", "cloudobjectstorage" ],
   "servicePlans": {
-    "streamingAnalytics": "entry-container-lite"
+    "streamingAnalytics": "entry-container-lite",
+    "cloudobjectstorage": "lite"
   }
 }

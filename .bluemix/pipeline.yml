@@ -1,0 +1,70 @@
+---
+stages:
+- name: Build flow
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+  triggers:
+  - type: commit
+  jobs:
+  - name: Build driver
+    type: builder
+    artifact_dir: target
+    build_type: maven
+    script: |-
+      #!/bin/bash
+      export JAVA_HOME=$JAVA8_HOME
+      mvn -B -Pstreams-runner package
+- name: Deploy flow to development
+  inputs:
+  - type: job
+    stage: Build flow
+    job: Build driver
+  triggers:
+  - type: stage
+  properties:
+  {{#each config.creds}}
+  - name: {{@key}}
+    value: {{{this}}}
+    type: text
+  {{/each}}
+  - name: PIPELINE_API_KEY
+    value: ${API_KEY}
+    type: text
+  jobs:
+  - name: Deploy flow
+    type: deployer
+    deploy_type: customimage
+    script: |
+      #!/bin/bash
+
+      if ! [ -x "$(command -v bx)" ]; then
+        curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+      fi
+
+      # TODO : how to know which env to use ?
+      bx login --apikey $API_KEY -a https://api.stage1.ng.bluemix.net
+
+      SA_KEY=$(bx resource service-key-create my-service-key Administrator --instance-name "${streaming-analytics}")
+
+      echo "generating vcap.json"
+            echo "{
+              \"streaming-analytics\":[{
+                \"name\" : ${SA_NAME},
+                \"credentials\" : {
+                    \"apiKey\": $(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }'),
+                    \"v2_rest_url\": $(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')
+              }]
+            }" > vcap.json
+
+      java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
+      com.ibm.streams.beam.sample.temperature.TemperatureSample \
+      --runner=StreamsRunner \
+      --contextType=STREAMING_ANALYTICS_SERVICE \
+      --vcapServices=./vcap.json \
+      --serviceName=streaming-analytics \
+      --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
+      --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
+      --jobName={{name}}
+    docker_image: maven:3.5.3-ibmjava

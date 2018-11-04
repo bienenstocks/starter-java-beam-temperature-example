@@ -8,7 +8,9 @@ A generated IBM Cloud application
 - Fill in the vcap.json to point to the service
 - `source ./streams-runner-env.sh`
 
+
 ## Run locally using the Beam DirectRunner
+
 
 ```bash
 ./run-dev
