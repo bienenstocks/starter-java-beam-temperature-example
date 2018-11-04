@@ -31,9 +31,9 @@
       "version": "0.x.x"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics", "cloudobjectstorage" ],
+  "requiredCapabilities": [ "streamingAnalytics", "cloudObjectStorage" ],
   "servicePlans": {
     "streamingAnalytics": "entry-container-lite",
-    "cloudobjectstorage": "lite"
+    "cloudObjectStorage": "lite"
   }
 }
