@@ -44,17 +44,19 @@ stages:
       fi
 
       # TODO : how to know which env to use ?
-      bx login --apikey $API_KEY -a https://api.stage1.ng.bluemix.net
+      bx login --apikey $API_KEY -a https://api.ng.bluemix.net
+      bx target --cf
 
-      SA_KEY=$(bx resource service-key-create my-service-key Administrator --instance-name "${streaming-analytics}")
+      SA_KEY=$(bx resource service-key-create my-service-key Writer --instance-name "${streaming-analytics}")
 
       echo "generating vcap.json"
             echo "{
               \"streaming-analytics\":[{
-                \"name\" : ${SA_NAME},
+                \"name\" : \"streaming-analytics\",
                 \"credentials\" : {
                     \"apiKey\": $(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }'),
                     \"v2_rest_url\": $(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')
+                 }
               }]
             }" > vcap.json
 
