@@ -49,7 +49,7 @@ stages:
               \"streaming-analytics\":[{
                 \"name\" : \"streaming-analytics\",
                 \"credentials\" : {
-                    \"apiKey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
+                    \"apikey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
                     \"v2_rest_url\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')\"
                  }
               }]
