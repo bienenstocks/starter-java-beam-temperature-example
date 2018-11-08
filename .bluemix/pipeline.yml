@@ -33,7 +33,9 @@ stages:
     deploy_type: customimage
     script: |
       #!/bin/bash
-
+      Handlebars.registerHelper('json', function(context) {
+        return JSON.stringify(context);
+      });
       cat {{{json config.creds.streamingAnalytics.name}}}
 
       if ! [ -x "$(command -v bx)" ]; then
