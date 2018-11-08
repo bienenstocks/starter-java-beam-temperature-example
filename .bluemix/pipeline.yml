@@ -34,7 +34,9 @@ stages:
     script: |
       #!/bin/bash
 
-      cat {{{config.creds.streamingAnalytics.name}}}
+      {{#each config.creds.streamingAnalytics}}
+        streamingAnalytics={{this.name}}
+      {{/each}}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
@@ -43,7 +45,6 @@ stages:
       # TODO : how to know which env to use ?
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
-      streamingAnalytics="Streaming Analytics-vx"
       SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name "${streamingAnalytics}")
 
       echo "generating vcap.json"
