@@ -25,7 +25,7 @@ stages:
   - type: stage
   properties:
 {{#if config.creds.streamingAnalytics}}
-   - name: streamingAnalytics
+   - name: SA
     value: {{config.creds.streamingAnalytics}}
     type: text area
 {{/if}}
