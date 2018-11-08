@@ -24,11 +24,6 @@ stages:
   triggers:
   - type: stage
   properties:
-{{#if config.creds.streamingAnalytics}}
-   - name: SA
-    value: {{&config.creds.streamingAnalytics}}
-    type: text 
-{{/if}}
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
     type: text
@@ -38,6 +33,8 @@ stages:
     deploy_type: customimage
     script: |
       #!/bin/bash
+
+      cat {{config.creds.streamingAnalytics}}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
