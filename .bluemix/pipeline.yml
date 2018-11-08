@@ -34,7 +34,7 @@ stages:
     script: |
       #!/bin/bash
 
-      {{#each config.creds}}
+      {{#each config.creds.streaming-analytics}}
         streamingAnalytics={{this.name}}
       {{/each}}
 
