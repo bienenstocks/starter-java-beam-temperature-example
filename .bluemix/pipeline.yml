@@ -34,8 +34,8 @@ stages:
     script: |
       #!/bin/bash
 
-      {{#each config.creds.streaming-analytics}}
-        streamingAnalytics={{this.name}}
+      {{#each config.creds.streamingAnalytics}}
+        streamingAnalytics={{this}}
       {{/each}}
 
       if ! [ -x "$(command -v bx)" ]; then
