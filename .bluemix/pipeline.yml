@@ -24,8 +24,8 @@ stages:
   triggers:
   - type: stage
   properties:
-{{#each config.creds.streamingAnalytics}}
-   - name: streamingAnalytics 
+{{#each config.creds}}
+   - name: {{@key}}
     value: {{{this}}} 
     type: text 
 {{/each}}
