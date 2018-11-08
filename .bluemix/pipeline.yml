@@ -24,10 +24,10 @@ stages:
   triggers:
   - type: stage
   properties:
-{{#each config.creds}}
-   - name: {{@key}}
-    value: {{{this}}} 
-    type: text 
+{{#if config.creds.streamingAnalytics}}
+   - name: streamingAnalytics
+    value: {{config.creds.streamingAnalytics}}
+    type: text area
 {{/each}}
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
