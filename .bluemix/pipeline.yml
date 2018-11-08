@@ -26,7 +26,7 @@ stages:
   properties:
 {{#each config.creds.streamingAnalytics}}
    - name: streamingAnalytics 
-    value: {{{this.name}}} 
+    value: {{{this}}} 
     type: text 
 {{/each}}
   - name: PIPELINE_API_KEY
