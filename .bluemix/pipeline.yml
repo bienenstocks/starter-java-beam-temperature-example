@@ -34,7 +34,7 @@ stages:
     script: |
       #!/bin/bash
 
-      cat {{config.creds.streamingAnalytics}}
+      cat {{{json config.creds.streamingAnalytics}}}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
