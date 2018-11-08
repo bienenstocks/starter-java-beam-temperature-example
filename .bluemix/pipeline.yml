@@ -26,7 +26,7 @@ stages:
   properties:
 {{#if config.creds.streamingAnalytics}}
    - name: SA
-    value: {{config.creds.streamingAnalytics}}
+    value: {{{config.creds.streamingAnalytics}}}
     type: text area
 {{/if}}
   - name: PIPELINE_API_KEY
