@@ -7,7 +7,7 @@ template:
     - build
 
 toolchain:
-  name: MyFirstGeneratedApplication
+  name: {{name}}
 
 services:
   # Github repos
