@@ -34,9 +34,8 @@ stages:
     script: |
       #!/bin/bash
 
-      {{#each config.creds.streamingAnalytics}}
-        streamingAnalytics={{this}}
-      {{/each}}
+      dir=$(pwd)
+      cat dir/.bluemix/services.json
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
