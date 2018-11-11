@@ -38,6 +38,7 @@ services:
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
           REGION_ID: "{{tag 'form.pipeline.parameters.dev-region'}}"
+          COS_BUCKET: '{{form.pipeline.parameters.cos-bucket}}'
         execute: true
 
   #Web IDE
