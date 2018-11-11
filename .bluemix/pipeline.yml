@@ -37,7 +37,7 @@ stages:
       dir=$(pwd)
       cat dir/.bluemix/services.json
 
-      cat {{app-name}}
+      cat " APP NAME: {{app-name}}"
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
