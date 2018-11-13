@@ -11,11 +11,7 @@
     "app-name": {
       "description": "app name",
       "type": "string"
-    },
-    "cos-bucket": {
-      "description": "The bucket name can be found by clicking the Buckets link on the left side of the Cloud Object Storage service. Choose or create a bucket in the region matching the endpoint.",
-      "type": "string"
-    },
+    }
   },
   "required": ["app-name"],  "form": [{
      "type": "validator",
@@ -32,12 +28,6 @@
     "readonly": false,
     "title": "App Name",
     "key": "app-name"
-  },
-  {
-    "type": "text",
-    "readonly": false,
-    "title": "Cloud Object Storage Bucket",
-    "key": "cos-bucket"
   },
   {
     "type": "table",
