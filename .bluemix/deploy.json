@@ -28,8 +28,7 @@
     "readonly": false,
     "title": "App Name",
     "key": "app-name"
-  },
-  {
+  }, {
     "type": "table",
     "columnCount": 3,
     "widths": ["28%", "28%", "28%"],
