@@ -34,9 +34,6 @@ stages:
     script: |
       #!/bin/bash
 
-      {{#with config.streamingAnalytics.[1]}}
-        streamingAnalytics=this.serviceInfo.name
-      {{/with}}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
