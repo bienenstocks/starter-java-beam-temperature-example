@@ -31,8 +31,9 @@
       "version": "0.x.x"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics" ],
+  "requiredCapabilities": [ "streamingAnalytics", "messageHub" ],
   "servicePlans": {
-    "streamingAnalytics": "entry-container-lite"
+    "streamingAnalytics": "entry-container-lite",
+    "messageHub": "standard"
   }
 }
