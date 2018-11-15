@@ -9,11 +9,11 @@
       "type": "string"
     }
   },
-  "required": ["app-name"],  "form": [
+  "required": ["api-key"],  "form": [
   {
     "type": "password",
     "readonly": false,
     "title": "IBM Cloud API Key",
-    "key": "api-key",
+    "key": "api-key"
   }]
 }
