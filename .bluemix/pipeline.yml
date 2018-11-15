@@ -34,16 +34,13 @@ stages:
     script: |
       #!/bin/bash
 
-
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
       fi
-
       # TODO : how to know which env to use ?
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
       SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name "${streamingAnalytics}")
-
       echo "generating vcap.json"
             echo "{
               \"streaming-analytics\":[{
@@ -54,7 +51,6 @@ stages:
                  }
               }]
             }" > vcap.json
-
       java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
       com.ibm.streams.beam.sample.temperature.TemperatureSample \
       --runner=StreamsRunner \
