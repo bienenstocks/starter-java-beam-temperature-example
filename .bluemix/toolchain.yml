@@ -38,6 +38,7 @@ services:
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
           REGION_ID: "{{tag 'form.pipeline.parameters.dev-region'}}"
+
         execute: true
 
   #Web IDE
@@ -49,7 +50,7 @@ form:
   pipeline:
     parameters:
       app-name: {{name}}
-      api-key: {{tag 'api-key'}}
+      api-key: "{{tag 'api-key'}}"
       dev-region: {{region}}
       dev-space: {{space}}
       dev-organization: {{org}}
