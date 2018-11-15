@@ -31,10 +31,8 @@
       "version": "0.x.x"
     }
   },
-  "requiredCapabilities": [ "streamingAnalytics", "messageHub", "cloudObjectStorage" ],
+  "requiredCapabilities": [ "streamingAnalytics" ],
   "servicePlans": {
-    "streamingAnalytics": "entry-container-lite",
-    "messageHub": "standard",
-    "cloudObjectStorage": "lite"
+    "streamingAnalytics": "entry-container-lite"
   }
 }
