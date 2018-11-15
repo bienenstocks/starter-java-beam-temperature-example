@@ -10,7 +10,7 @@
   "name": "Apache Beam Java temperature example",
   "previewURLs": [],
   "type": "OTHER",
-  "toolchain" : ["CF"],
+  "toolchain" : ["GENERIC"],
   "tags":["devex", "eventdriven"],
   "thumbnailURL": "blueprint/webapp.svg",
   "email": "ilanp@il.ibm.com",
