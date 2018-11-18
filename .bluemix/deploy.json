@@ -1,19 +1,145 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Sample Deploy Stage",
-  "longDescription": "The Delivery Pipeline automates continuous deployment.",
+  "messages": {
+    "$i18n": "locales.yml"
+  },
+  "title": {
+    "$ref": "#/messages/deploy.title"
+  },
+  "description": {
+    "$ref": "#/messages/deploy.description"
+  },
+  "longDescription": {
+    "$ref": "#/messages/deploy.longDescription"
+  },
   "type": "object",
   "properties": {
-    "api-key": {
-      "description": "IBM Cloud API keys contain permissions that grant access to organizations, spaces, and Kubernetes clusters. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
+    "sa-instance-name": {
+      "description": "Streaming Analytics Service name. In IBM Cloud, find the Streaming Analytics Service to be used. Ensure it is started.",
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "mh-instance-name": {
+      "description": "Message Hub Service name. In IBM Cloud, find the Message Hub Instance to be used.",
+      "type": "string",
+      "quoted": true
+    },
+    "cos-instance-name-endpoint": {
+      "description": "Cloud Object Storage Service name. In IBM Cloud, find the Cloud Object Storage Service Instance to be used.",
       "type": "string"
+    },
+    "prod-region": {
+      "description": "The bluemix region",
+      "type": "string"
+    },
+    "prod-organization": {
+      "description": "The bluemix org",
+      "type": "string"
+    },
+    "prod-space": {
+      "description": "The bluemix space",
+      "type": "string"
+    },
+    "prod-app-name": {
+      "description": {
+        "$ref": "#/messages/deploy.appDescription"
+      },
+      "type": "string",
+      "pattern": "\\S"
     }
   },
-  "required": ["api-key"],  "form": [
-  {
-    "type": "password",
-    "readonly": false,
-    "title": "IBM Cloud API Key",
-    "key": "api-key"
-  }]
+  "required": [
+    "sa-instance-name",
+    "mh-instance-name",
+    "cos-instance-name",
+    "prod-region",
+    "prod-organization",
+    "prod-space",
+    "prod-app-name"
+  ],
+  "form": [
+    {
+      "type": "validator",
+      "url": "/devops/setup/bm-helper/helper.html"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": {
+        "$ref": "#/messages/deploy.appName"
+      },
+      "key": "prod-app-name"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": "Streaming Analytics Instance Name",
+      "key": "sa-instance-name"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": "Message Hub Instance Name",
+      "key": "mh-instance-name"
+    },
+    {
+      "type": "text",
+      "readonly": false,
+      "title": "Cloud Object Instance Name",
+      "key": "cos-instance-name"
+    },
+    {
+      "type": "table",
+      "columnCount": 4,
+      "widths": [
+        "15%",
+        "28%",
+        "28%",
+        "28%"
+      ],
+      "items": [
+        {
+          "type": "label",
+          "title": ""
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/region"
+          }
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/organization"
+          }
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/space"
+          }
+        },
+        {
+          "type": "label",
+          "title": {
+            "$ref": "#/messages/prodStage"
+          }
+        },
+        {
+          "type": "select",
+          "key": "prod-region"
+        },
+        {
+          "type": "select",
+          "key": "prod-organization"
+        },
+        {
+          "type": "select",
+          "key": "prod-space",
+          "readonly": false
+        }
+      ]
+    }
+  ]
 }

@@ -1,49 +1,60 @@
 version: '2'
+messages:
+  $i18n: locales.yml
 template:
-  name: Continuous Delivery Toolchain
-  description: "This toolchain includes tools to develop and deploy your event driven app. \n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
+  name:
+    $ref: "#/messages/template.name"
+  description:
+    $ref: "#/messages/template.description"
+  header: '![](toolchain.svg?localize)'
+  icon: icon.svg
   required:
-    - repo
-    - build
-
+    - sample-build
+    - sample-repo
+  info:
+    git url: >-
+      [https://github.com/bienenstocks/pipelinedeploy](https://github.com/bienenstocks/pipelinedeploy)
+    git branch: >-
+      [master](https://github.com/bienenstocks/pipelinedeploy/tree/master)
 toolchain:
-  name: {{name}}
-
+  name: 'simple-toolchain-{{timestamp}}'
+  template:
+    getting_started:
+      $ref: "#/messages/template.gettingStarted"
 services:
-  # Github repos
-  repo:
+  sample-repo:
     service_id: hostedgit
     parameters:
-      repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
-      repo_name: "{{tag 'toolchain.name'}}"
+      repo_name: '{{toolchain.name}}'
+      repo_url: 'https://github.com/bienenstocks/pipelinedeploy'
       type: clone
       has_issues: true
       enable_traceability: true
-
-  # Pipelines
-  build:
+  sample-build:
     service_id: pipeline
     parameters:
       services:
-        - repo
-      name: "{{tag 'name'}}"
+        - sample-repo
+      name: '{{services.sample-repo.parameters.repo_name}}'
       ui-pipeline: true
       configuration:
         content:
           $text: pipeline.yml
         env:
-          REPO: repo
-          API_KEY: "{{tag 'form.pipeline.parameters.api-key'}}"
+          SAMPLE_REPO: sample-repo
+          CF_APP_NAME: '{{form.pipeline.parameters.prod-app-name}}'
+          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
+          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+          SA_INSTANCE_NAME: "{{form.pipeline.parameters.sa-instance-name}}"
+          MH_INSTANCE_NAME: '{{form.pipeline.parameters.mh-instance-name}}'
+          COS_INSTANCE_NAME: '{{form.pipeline.parameters.cos-instance-name}}'
         execute: true
-
-  #Web IDE
   webide:
     service_id: orion
-
-#Deployment
 form:
   pipeline:
     parameters:
-      api-key: "{{tag 'api-key'}}"
+      prod-app-name: '{{services.sample-repo.parameters.repo_name}}'
     schema:
       $ref: deploy.json
