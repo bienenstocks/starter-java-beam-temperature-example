@@ -46,7 +46,8 @@ stages:
       # TODO : how to know which env to use ?
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
-      SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name ${streamingAnalytics})
+      echo $streamingAnalyticss
+      SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name "${streamingAnalytics}")
       echo "generating vcap.json"
             echo "{
               \"streaming-analytics\":[{
