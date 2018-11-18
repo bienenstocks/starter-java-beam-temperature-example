@@ -1,17 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "messages": {
-    "$i18n": "locales.yml"
-  },
-  "title": {
-    "$ref": "#/messages/deploy.title"
-  },
-  "description": {
-    "$ref": "#/messages/deploy.description"
-  },
-  "longDescription": {
-    "$ref": "#/messages/deploy.longDescription"
-  },
+  "title": "Sample Deploy Stage",
+  "longDescription": "The Delivery Pipeline automates continuous deployment.",
   "type": "object",
   "properties": {
     "sa-instance-name": {
