@@ -70,30 +70,8 @@ stages:
                          \"apikey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
                          \"v2_rest_url\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')\"
                       }
-                   }]" > vcap.json
-
-           # check for COS {{#if config.creds.cloudObjectStorage}}
-           COS_NAME="cloud-object-storage-pb"
-           bx plugin install cloud-object-storage
-           cos=$(bx resource service-instance ${COS_NAME})
-           coscrn=$(echo ${cos} | awk 'BEGIN{FS=“crn: "} {print $2}' | awk '{ print $1 }')
-           bx cos config —crn $coscrn
-           bx cos create-bucket --bucket {{name}} --region us-geo
-
-           echo ",\"cloudObjectStorage\":[{
-                     \"name\" : \"cloudObjectStorage\",
-                     \"credentials\" : {
-                         \"endpoin\t": "s3-api.us-geo.objectstorage.softlayer.net",
-                         \"accessKeyId\": //sars
-                         \"secretKey\": // sars
-                         \"bucket\": ${jobName},
-                         \"filePrefix\": "prefix"
-                      }
-                   }]" > vcap.json
-
-           echo  "}" >> vcap.json
-
-           java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
+                   }]}" > vcap.json
+          java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
            com.ibm.streams.beam.sample.temperature.TemperatureSample \
            --runner=StreamsRunner \
            --contextType=STREAMING_ANALYTICS_SERVICE \
