@@ -35,9 +35,14 @@ stages:
       #!/bin/bash
 
       {{#each config.streamingAnalytics}}
+        echo "Dump SA NAME"
         streamingAnalytics={{this.serviceInfo.name}}
+        SA={{serviceInfo.name}}
+        echo $SA
         echo $streamingAnalytics
       {{/each}}
+
+      {{lookup config 'streamingAnalytics' }}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
