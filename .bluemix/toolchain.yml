@@ -1,26 +1,13 @@
 version: '2'
-messages:
-  $i18n: locales.yml
 template:
-  name:
-    $ref: "#/messages/template.name"
-  description:
-    $ref: "#/messages/template.description"
-  header: '![](toolchain.svg?localize)'
-  icon: icon.svg
+  name: Continuous Delivery Toolchain
+  description: "This toolchain includes tools to develop and deploy your event driven app. \n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
   required:
-    - sample-build
-    - sample-repo
-  info:
-    git url: >-
-      [https://github.com/bienenstocks/pipelinedeploy](https://github.com/bienenstocks/pipelinedeploy)
-    git branch: >-
-      [master](https://github.com/bienenstocks/pipelinedeploy/tree/master)
+    - repo
+    - build
+
 toolchain:
-  name: 'simple-toolchain-{{timestamp}}'
-  template:
-    getting_started:
-      $ref: "#/messages/template.gettingStarted"
+  name:  '{{toolchain.name}}'
 services:
   sample-repo:
     service_id: hostedgit
