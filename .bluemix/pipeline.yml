@@ -34,19 +34,15 @@ stages:
     script: |
       #!/bin/bash
 
-      {{#each config.streamingAnalytics}}
-        echo "Dump SA NAME"
+      // This will return the first SA instance. will need to use #each if need to support multiple instances.
+      {{#with config.creds.streamingAnalytics.[0]}}
         streamingAnalytics={{this.serviceInfo.name}}
-        SA={{serviceInfo.name}}
-        echo $SA
-        echo $streamingAnalytics
-      {{/each}}
-
-      {{lookup config 'streamingAnalytics' }}
+      {{/with}}
 
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
       fi
+
       # TODO : how to know which env to use ?
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
