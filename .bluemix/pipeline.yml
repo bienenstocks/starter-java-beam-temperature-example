@@ -36,7 +36,7 @@ stages:
 
       // This will return the first SA instance. will need to use #each if need to support multiple instances.
       {{#with config.creds.streamingAnalytics.[0]}}
-        streamingAnalytics={{this.serviceInfo.name}}
+        streamingAnalytics="{{this.serviceInfo.name}}"
       {{/with}}
 
       if ! [ -x "$(command -v bx)" ]; then
@@ -46,7 +46,7 @@ stages:
       # TODO : how to know which env to use ?
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
-      SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name "${streamingAnalytics}")
+      SA_KEY=$(bx resource service-key-create my-service-key Manager --instance-name ${streamingAnalytics})
       echo "generating vcap.json"
             echo "{
               \"streaming-analytics\":[{
