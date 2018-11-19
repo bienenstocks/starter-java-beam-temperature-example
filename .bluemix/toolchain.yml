@@ -11,9 +11,9 @@ template:
     - sample-repo
   info:
     git url: >-
-      [https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example](https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example)
+      [https://github.com/bienenstocks/starter-java-beam-temperature-example](https://github.com/bienenstocks/starter-java-beam-temperature-example)
     git branch: >-
-      [master](https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example/tree/master)
+      [master](https://github.com/bienenstocks/starter-java-beam-temperature-example/tree/master)
 toolchain:
   name: 'starter-java-beam-temperature-example-{{timestamp}}'
 
@@ -22,7 +22,7 @@ services:
     service_id: hostedgit
     parameters:
       repo_name: '{{toolchain.name}}'
-      repo_url: "https://git.ng.bluemix.net/sarahb/"
+      repo_url: "https://github.com/bienenstocks/starter-java-beam-temperature-example"
       type: clone
       has_issues: true
       enable_traceability: true
