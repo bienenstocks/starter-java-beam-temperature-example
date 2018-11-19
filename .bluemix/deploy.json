@@ -14,30 +14,18 @@
     },
     "type": "object",
     "properties": {
-       "sa-instance": {
+       "sa-instance-name": {
          "description": "JSON containing the Streaming Analytics Service credentials. This can be found by clicking the Service Credentials link on the left side of the Streaming Analytics Service. Then, click View Credentials to view the JSON.",
           "type": "string",
           "pattern": "\\S"
        },
-       "mh-instance": {
+       "mh-instance-name": {
           "description": "JSON containing the Message Hub Service credentials. This can be found by clicking the Service Credentials link on the left side of the Message Hub Service. Then, click View Credentials to view the JSON.",
           "type": "string",
           "quoted": true
         },
-       "aws-endpoint": {
+        "cos-instance-name": {
           "description": "The endpoint can be found by clicking the Endpoint link of the left side of the Cloud Object Storage service. Choose a public endpoint from the chosen region that contains the bucket to write to.",
-          "type": "string"
-        },
-        "aws-access-key-id": {
-           "description": "The access key can be found by clicking the Service Credentials link on the left side of the Cloud Object Storage service. Click View Credentials, and get the access_key_id from cos_hmac_keys. To create credentials with HMAC keys, click New Credentials. Specify {HMAC:true} in the Add Inline Configuration Parameters.",
-           "type": "string"
-         },
-        "aws-secret-access-key": {
-          "description": "The secret key can be found by clicking the Service Credentials link on the left side of the Cloud Object Storage service. Click View Credentials, and get the secret_access_key from cos_hmac_keys. To create credentials with HMAC keys, click New Credentials. Specify {HMAC:true} in the Add Inline Configuration Parameters.",
-          "type": "password"
-        },
-        "aws-bucket": {
-          "description": "The bucket name can be found by clicking the Buckets link on the left side of the Cloud Object Storage service. Choose or create a bucket in the region matching the endpoint.",
           "type": "string"
         },
         "prod-region": {
@@ -61,12 +49,9 @@
         }
     },
     "required": [
-        "sa-instance",
-        "mh-instance",
-        "aws-endpoint",
-        "aws-access-key-id",
-        "aws-secret-access-key",
-        "aws-bucket",
+        "sa-instance-name",
+        "mh-instance-name",
+        "cos-instance-name",
         "prod-region",
         "prod-organization",
         "prod-space",
@@ -86,40 +71,22 @@
             "key": "prod-app-name"
         },
         {
-           "type": "textarea",
+           "type": "text",
            "readonly": false,
-           "title": "Streaming Analytics Credentials",
-           "key": "sa-instance"
+           "title": "Streaming Analytics Service Instance Name",
+           "key": "sa-instance-name"
         },
         {
-          "type": "textarea",
+          "type": "text",
           "readonly": false,
-          "title": "Message Hub Credentials",
-          "key": "mh-instance"
+          "title": "Message Hub Service Instance Name",
+          "key": "mh-instance-name"
        },
        {
           "type": "text",
           "readonly": false,
-          "title": "Cloud Object Storage Endpoint",
-          "key": "aws-endpoint"
-        },
-        {
-          "type": "text",
-          "readonly": false,
-          "title": "Cloud Object Storage Access Key",
-          "key": "aws-access-key-id"
-        },
-        {
-          "type": "password",
-          "readonly": false,
-          "title": "Cloud Object Storage Secret Key",
-          "key": "aws-secret-access-key"
-        },
-        {
-          "type": "text",
-          "readonly": false,
-          "title": "Cloud Object Storage Bucket",
-          "key": "aws-bucket"
+          "title": "Cloud Object Storage Service Instance Name",
+          "key": "cos-instance-name"
         },
         {
             "type": "table",
