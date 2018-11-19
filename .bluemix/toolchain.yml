@@ -11,9 +11,9 @@ template:
     - sample-repo
   info:
     git url: >-
-      [https://github.com/bienenstocks/pipelinedeploy](https://github.com/bienenstocks/pipelinedeploy)
+      [https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example](https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example)
     git branch: >-
-      [master](https://github.com/bienenstocks/pipelinedeploy/tree/master)
+      [master](https://github.ibm.com/wdp-streaming-pipelines/starter-java-beam-temperature-example/tree/master)
 toolchain:
   name: 'starter-java-beam-temperature-example-{{timestamp}}'
 
