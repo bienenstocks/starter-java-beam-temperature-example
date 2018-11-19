@@ -17,10 +17,8 @@ template:
     git branch: >-
       [master](https://github.com/bienenstocks/pipelinedeploy/tree/master)
 toolchain:
-  name: 'simple-toolchain-{{timestamp}}'
-  template:
-    getting_started:
-      $ref: "#/messages/template.gettingStarted"
+  name: 'starter-jave-beam-temperature-example-{{timestamp}}'
+
 services:
   sample-repo:
     service_id: hostedgit
