@@ -33,7 +33,7 @@ stages:
   - name: COS_INSTANCE
     value: ${COS_INSTANCE_NAME}
     type: text
-  - name: CF_APP_NAME
+  - name: APP_NAME
     value: ${CF_APP_NAME}
     type: text
   - name: PIPELINE_API_KEY
@@ -47,38 +47,8 @@ stages:
       region_id: ${PROD_REGION_ID}
       organization: ${PROD_ORG_NAME}
       space: ${PROD_SPACE_NAME}
-      application: ${CF_APP_NAME}
+      application: ${APP_NAME}
     script: |
       #!/bin/bash
-
-      . build.properties
-
-      if ! [ -x "$(command -v bx)" ]; then
-        curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
-      fi
-
-      # TODO : how to know which env to use ?
-      bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
-      bx target --cf
-
-      SA_KEY=$(bx resource service-key-create ${CF_APP_NAME} Manager --instance-name "${SA_INSTANCE}")
-      echo "generating vcap.json"
-      echo "{
-        \"streaming-analytics\":[{
-        \"name\" : \"streaming-analytics\",
-        \"credentials\" : {
-          \"apikey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
-          \"v2_rest_url\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')\"
-        }
-        }]}" > vcap.json
-
-      java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
-          com.ibm.streams.beam.sample.temperature.TemperatureSample \
-          --runner=StreamsRunner \
-          --contextType=STREAMING_ANALYTICS_SERVICE \
-          --vcapServices=./vcap.json \
-          --serviceName=streaming-analytics \
-          --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
-          --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
-          --jobName={{name}}
+      ./.bluemix/deploy.sh
     docker_image: maven:3.5.3-ibmjava

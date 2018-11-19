@@ -27,6 +27,11 @@ stages:
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
     type: text
+ {{#with config.creds.streamingAnalytics.[0]}}
+  - name: SA_INSTANCE
+    value: {{this.serviceInfo.name}}
+    type: text
+ {{/with}}
   jobs:
   - name: Deploy flow
     type: deployer
@@ -44,11 +49,8 @@ stages:
       bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
       bx target --cf
 
-      {{#with config.creds.streamingAnalytics.[0]}}
-        streamingAnalytics="{{this.serviceInfo.name}}"
-      {{/with}}
-      echo $streamingAnalytics
-      SA_KEY=$(bx resource service-key-create ${jobName} Manager --instance-name "${streamingAnalytics}")
+      echo $SA_INSTANCE
+      SA_KEY=$(bx resource service-key-create ${jobName} Manager --instance-name "${SA_INSTANCE}")
       echo "generating vcap.json"
       echo "{
               \"streaming-analytics\":[{
