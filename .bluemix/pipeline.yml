@@ -30,7 +30,7 @@ stages:
   - name: MH_INSTANCE
     value: ${MH_INSTANCE_NAME}
     type: text
-  - name: MH_INSTANCE
+  - name: COS_INSTANCE
     value: ${COS_INSTANCE_NAME}
     type: text
   - name: CF_APP_NAME
