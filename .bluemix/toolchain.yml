@@ -1,13 +1,26 @@
 version: '2'
+messages:
+  $i18n: locales.yml
 template:
-  name: Continuous Delivery Toolchain
-  description: "This toolchain includes tools to develop and deploy your event driven app. \n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
+  name:
+    $ref: "#/messages/template.name"
+  description:
+    $ref: "#/messages/template.description"
+  header: '![](toolchain.svg?localize)'
+  icon: icon.svg
   required:
-    - repo
-    - build
-
+    - sample-build
+    - sample-repo
+  info:
+    git url: >-
+      [https://github.com/bienenstocks/pipelinedeploy](https://github.com/bienenstocks/pipelinedeploy)
+    git branch: >-
+      [master](https://github.com/bienenstocks/pipelinedeploy/tree/master)
 toolchain:
-  name:  '{{toolchain.name}}'
+  name: 'simple-toolchain-{{timestamp}}'
+  template:
+    getting_started:
+      $ref: "#/messages/template.gettingStarted"
 services:
   sample-repo:
     service_id: hostedgit
@@ -33,9 +46,12 @@ services:
           PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
           PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
           PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
-          SA_INSTANCE_NAME: "{{form.pipeline.parameters.sa-instance-name}}"
-          MH_INSTANCE_NAME: '{{form.pipeline.parameters.mh-instance-name}}'
-          COS_INSTANCE_NAME: '{{form.pipeline.parameters.cos-instance-name}}'
+          SA_INSTANCE: "{{form.pipeline.parameters.sa-instance}}"
+          MH_INSTANCE: '{{form.pipeline.parameters.mh-instance}}'
+          COS_SECRET: '{{form.pipeline.parameters.aws-secret-access-key}}'
+          COS_KEY: '{{form.pipeline.parameters.aws-access-key-id}}'
+          COS_BUCKET: '{{form.pipeline.parameters.aws-bucket}}'
+          COS_ENDPOINT: '{{form.pipeline.parameters.aws-endpoint}}'
         execute: true
   webide:
     service_id: orion

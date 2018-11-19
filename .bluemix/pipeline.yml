@@ -7,6 +7,13 @@ stages:
     service: ${SAMPLE_REPO}
   triggers:
   - type: commit
+  properties:
+  - name: SA_INSTANCE
+    value: ${SA_INSTANCE}
+    type: textarea
+  - name: MH_INSTANCE
+    value: ${MH_INSTANCE}
+    type: textarea
   jobs:
   - name: Build driver
     type: builder
@@ -14,6 +21,14 @@ stages:
     build_type: maven
     script: |-
       #!/bin/bash
+      SA_INSTANCE=$(echo -e "${SA_INSTANCE}" | tr -d '[:space:]' | sed 's/"/\\"/g')
+      MH_INSTANCE=$(echo -e "${MH_INSTANCE}" | tr -d '[:space:]' | sed 's/"/\\"/g')
+
+      [[ -d "${ARCHIVE_DIR}" ]] || mkdir ${ARCHIVE_DIR}
+
+      `echo "SA_INSTANCE=${SA_INSTANCE}" >> $ARCHIVE_DIR/build.properties`
+      `echo "MH_INSTANCE=${MH_INSTANCE}" >> $ARCHIVE_DIR/build.properties`
+
       export JAVA_HOME=$JAVA8_HOME
       mvn -B -Pstreams-runner package
 - name: Deploy flow to development
@@ -30,14 +45,17 @@ stages:
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
     type: text
-  - name: COS_INSTANCE_NAME
-    value: ${COS_INSTANCE_NAME}
+  - name: COS_SECRET_ACCESS_KEY
+    value: ${COS_SECRET}
+    type: Secure
+  - name: COS_ACCESS_KEY_ID
+    value: ${COS_KEY}
     type: text
-  - name: MH_INSTANCE_NAME
-    value: ${MH_INSTANCE_NAME}
+  - name: PIPELINE_COS_BUCKET
+    value: ${COS_BUCKET}
     type: text
-  - name: SA_INSTANCE_NAME
-    value: ${SA_INSTANCE_NAME}
+  - name: PIPELINE_COS_ENDPOINT
+    value: ${COS_ENDPOINT}
     type: text
   jobs:
   - name: Deploy flow
@@ -50,34 +68,51 @@ stages:
       application: ${CF_APP_NAME}
     script: |
       #!/bin/bash
+      # Push app
 
-           jobName={{name}}
-           if ! [ -x "$(command -v bx)" ]; then
-             curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
-           fi
+      . build.properties
 
-           # TODO : how to know which env to use ?
-           bx login --apikey $PIPELINE_API_KEY -a https://api.ng.bluemix.net
-           bx target --cf
+      if [[ $PIPELINE_COS_ENDPOINT != \"* ]]; then
+        PIPELINE_COS_ENDPOINT=\"$PIPELINE_COS_ENDPOINT\"
+      fi
 
-           streamingAnalytics=$SA_INSTANCE_NAME
-           SA_KEY=$(bx resource service-key-create ${jobName} Manager --instance-name "${streamingAnalytics}")
-           echo "generating vcap.json"
-           echo "{
-                   \"streaming-analytics\":[{
-                     \"name\" : \"streaming-analytics\",
-                     \"credentials\" : {
-                         \"apikey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
-                         \"v2_rest_url\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')\"
-                      }
-                   }]}" > vcap.json
-          java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
-           com.ibm.streams.beam.sample.temperature.TemperatureSample \
-           --runner=StreamsRunner \
-           --contextType=STREAMING_ANALYTICS_SERVICE \
-           --vcapServices=./vcap.json \
-           --serviceName=streaming-analytics \
-           --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
-           --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
-           --jobName={{name}}
+      if [[ $PIPELINE_COS_BUCKET != \"* ]]; then
+        PIPELINE_COS_BUCKET=\"$PIPELINE_COS_BUCKET\"
+      fi
+
+      if [[ $COS_ACCESS_KEY_ID != \"* ]]; then
+        COS_ACCESS_KEY_ID=\"$COS_ACCESS_KEY_ID\"
+      fi
+
+      if [[ $COS_SECRET_ACCESS_KEY != \"* ]]; then
+        COS_SECRET_ACCESS_KEY=\"$COS_SECRET_ACCESS_KEY\"
+      fi
+
+      echo "generating vcap.json"
+            echo "{
+              \"streaming-analytics\":[{
+                \"name\" : \"streaming-analytics\",
+                \"credentials\" : $SA_INSTANCE
+              }],
+              \"messagehub\": $MH_INSTANCE,
+              \"cos\": {
+                \"accessKeyId\": $COS_ACCESS_KEY_ID,
+                \"secretKey\": $COS_SECRET_ACCESS_KEY,
+                \"endpoint\": $PIPELINE_COS_ENDPOINT,
+                \"bucket\": $PIPELINE_COS_BUCKET,
+                \"filePrefix\": \"$CF_APP_NAME\"
+              }
+            }" > vcap.json
+
+      cat ./vcap.json
+
+      java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
+            com.ibm.streams.beam.sample.datahistorian.DataHistorian \
+            --runner=StreamsRunner \
+            --contextType=STREAMING_ANALYTICS_SERVICE \
+            --vcapServices=./vcap.json \
+            --serviceName=streaming-analytics \
+            --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
+            --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
+            --jobName=$CF_APP_NAME
     docker_image: maven:3.5.3-ibmjava
