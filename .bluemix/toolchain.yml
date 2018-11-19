@@ -2,10 +2,8 @@ version: '2'
 messages:
   $i18n: locales.yml
 template:
-  name:
-    $ref: "#/messages/template.name"
-  description:
-    $ref: "#/messages/template.description"
+  name: 'starter-jave-beam-temperature-example-{{timestamp}}'
+  description: "This toolchain includes tools to develop and deploy your event driven app. \n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
   header: '![](toolchain.svg?localize)'
   icon: icon.svg
   required:
