@@ -22,7 +22,7 @@ services:
     service_id: hostedgit
     parameters:
       repo_name: '{{toolchain.name}}'
-      repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
+      repo_url: "https://git.ng.bluemix.net/sarahb/"
       type: clone
       has_issues: true
       enable_traceability: true
