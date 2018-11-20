@@ -27,6 +27,9 @@ stages:
   - name: PIPELINE_API_KEY
     value: ${API_KEY}
     type: text
+  - name: APP_NAME
+    value: {{name}}
+    type: text
  {{#with config.creds.streamingAnalytics.[0]}}
   - name: SA_INSTANCE
     value: {{this.serviceInfo.name}}
@@ -39,8 +42,6 @@ stages:
     script: |
       #!/bin/bash
 
-      jobName={{name}}
-
       if ! [ -x "$(command -v bx)" ]; then
         curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
       fi
@@ -50,7 +51,7 @@ stages:
       bx target --cf
 
       echo $SA_INSTANCE
-      SA_KEY=$(bx resource service-key-create ${jobName} Manager --instance-name "${SA_INSTANCE}")
+      SA_KEY=$(bx resource service-key-create ${APP_NAME} Manager --instance-name "${SA_INSTANCE}")
       echo "generating vcap.json"
       echo "{
               \"streaming-analytics\":[{
@@ -59,7 +60,7 @@ stages:
                     \"apikey\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')\",
                     \"v2_rest_url\": \"$(echo ${SA_KEY} | awk 'BEGIN{FS="v2_rest_url: "} {print $2}' | awk '{ print $1 }')\"
                  }
-              }]}" > vcap.json
+              }]" > vcap.json
 
       java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
       com.ibm.streams.beam.sample.temperature.TemperatureSample \
@@ -69,5 +70,5 @@ stages:
       --serviceName=streaming-analytics \
       --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
       --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
-      --jobName={{name}}
+      --jobName=$APP_NAME
     docker_image: maven:3.5.3-ibmjava
