@@ -24,9 +24,17 @@ stages:
   triggers:
   - type: stage
   properties:
+{{#if config}}
+ {{#with config.creds.streamingAnalytics.[0]}}
+    - name: SA_INSTANCE
+      value: {{this.serviceInfo.name}}
+      type: text
+ {{/with}}
+{{else}}
   - name: SA_INSTANCE
     value: ${SA_INSTANCE_NAME}
     type: text
+{{/if}}}}
   - name: MH_INSTANCE
     value: ${MH_INSTANCE_NAME}
     type: text
