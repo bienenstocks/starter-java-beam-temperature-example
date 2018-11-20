@@ -16,6 +16,7 @@ stages:
       #!/bin/bash
       export JAVA_HOME=$JAVA8_HOME
       mvn -B -Pstreams-runner package
+      cp .bluemix/scripts/* ${ARCHIVE_DIR}
 - name: Deploy flow to development
   inputs:
   - type: job
@@ -51,7 +52,7 @@ stages:
     script: |
       #!/bin/bash
 
-      ls scripts
+      ls deploy.sh
 
       if ! [ -x "$(command -v bx)" ]; then
          curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
@@ -78,14 +79,15 @@ stages:
 
       if [ $COS_INSTANCE ]; then
         # get COS credentials
+        bx resource service-key-delete "COS_${APP_NAME}"
+        COS_KEY=$(bx resource service-key-create "COS_${APP_NAME}" Manager --instance-name "${COS_INSTANCE}" --p {\"HMAC\":true})
+
         bx plugin repo-plugins -r 'IBM Cloud'
         bx plugin install cloud-object-storage 
         COS=$(bx resource service-instance "${COS_INSTANCE}")
          COSCRN=$(echo ${COS} | awk 'BEGIN{FS=“crn: "} {print $2}' | awk '{ print $1 }')
          bx cos config —crn $COSCRN
         bx cos create-bucket --bucket ${APP_NAME} --region us-geo
-        bx resource service-key-delete "COS_${APP_NAME}"
-        COS_KEY=$(bx resource service-key-create "COS_${APP_NAME}" Manager --instance-name "${COS_INSTANCE}" --p {\"HMAC\":true})
 
         echo ",
          \"cos\": {
@@ -106,7 +108,7 @@ stages:
           \"messagehub\": {
             \"user\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="user: "} {print $2}' | awk '{ print $1 }')\",
             \"password\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="password: "} {print $2}' | awk '{ print $1 }')\",
-            \"kafka_brokers_sasl\": \"[$(echo ${COS_KEY} | awk 'BEGIN{FS="kafka_brokers_sasl: "} {print $2}' | awk '{ print $1 }')]\",
+            \"kafka_brokers_sasl\": \"$(echo ${COS_KEY} | awk 'BEGIN{FS="kafka_brokers_sasl: "} {print $2}' | awk '{ print $1 }')\"
           }" >>vcap.json
       fi
 
