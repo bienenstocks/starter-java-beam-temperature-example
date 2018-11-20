@@ -1,55 +1,4 @@
----
-stages:
-- name: Build flow
-  inputs:
-  - type: git
-    branch: master
-    service: ${SAMPLE_REPO}
-  triggers:
-  - type: commit
-  jobs:
-  - name: Build driver
-    type: builder
-    artifact_dir: target
-    build_type: maven
-    script: |-
-      #!/bin/bash
-      export JAVA_HOME=$JAVA8_HOME
-      mvn -B -Pstreams-runner package
-- name: Deploy flow to development
-  inputs:
-  - type: job
-    stage: Build flow
-    job: Build driver
-  triggers:
-  - type: stage
-  properties:
-  - name: SA_INSTANCE
-    value: ${SA_INSTANCE_NAME}
-    type: text
-  - name: MH_INSTANCE
-    value: ${MH_INSTANCE_NAME}
-    type: text
-  - name: COS_INSTANCE
-    value: ${COS_INSTANCE_NAME}
-    type: text
-  - name: APP_NAME
-    value: ${CF_APP_NAME}
-    type: text
-  - name: PIPELINE_API_KEY
-    value: ${API_KEY}
-    type: text
-  jobs:
-  - name: Deploy flow
-    type: deployer
-    deploy_type: customimage
-    target:
-      region_id: ${PROD_REGION_ID}
-      organization: ${PROD_ORG_NAME}
-      space: ${PROD_SPACE_NAME}
-      application: ${APP_NAME}
-    script: |
-      #!/bin/bash
+ #!/bin/bash
 
 
       echo "region 1. ${PROD_REGION_ID} 2. $region_id"
@@ -97,23 +46,11 @@ stages:
          }" >> vcap.json
       fi
 
-      if [ $MH_INSTANCE ]; then
-        bx resource service-key-delete "MH_${APP_NAME}"
-        MH_KEY=$(bx resource service-key-create "MH_${APP_NAME}" Manager --instance-name "${MH_INSTANCE}")
-
-        echo ",
-          \"messagehub\": {
-            \"user\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="user: "} {print $2}' | awk '{ print $1 }')\",
-            \"password\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="password: "} {print $2}' | awk '{ print $1 }')\",
-            \"kafka_brokers_sasl\": \"$(echo ${COS_KEY} | awk 'BEGIN{FS="kafka_brokers_sasl: "} {print $2}' | awk '{ print $1 }')\",
-          }" >>vcap.json
-      fi
-
       echo "}" >> vcap.json
       cat vcap.json
 
       java -cp ./example-starter-kit-0.1-SNAPSHOT.jar:./dependency/com.ibm.streams.beam-1.2.1/com.ibm.streams.beam/lib/com.ibm.streams.beam.translation.jar \
-           com.ibm.streams.beam.sample.temperature.TemperatureSample \
+      com.ibm.streams.beam.sample.temperature.TemperatureSample \
                --runner=StreamsRunner \
                --contextType=STREAMING_ANALYTICS_SERVICE \
                --vcapServices=./vcap.json \
@@ -121,4 +58,3 @@ stages:
                --beamToolkitDir=./dependency/com.ibm.streams.beam-1.2.1 \
                --jarsToStage=./example-starter-kit-0.1-SNAPSHOT.jar \
                --jobName=${APP_NAME}
-    docker_image: maven:3.5.3-ibmjava
