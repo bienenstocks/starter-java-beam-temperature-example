@@ -51,8 +51,7 @@ stages:
     script: |
       #!/bin/bash
 
-
-      echo "region 1. ${PROD_REGION_ID} 2. $region_id"
+      ls ./scripts
 
       if ! [ -x "$(command -v bx)" ]; then
          curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
@@ -79,6 +78,7 @@ stages:
 
       if [ $COS_INSTANCE ]; then
         # get COS credentials
+        bx plugin repo-plugins -r 'IBM Cloud'
         bx plugin install cloud-object-storage 
         COS=$(bx resource service-instance "${COS_INSTANCE}")
          COSCRN=$(echo ${COS} | awk 'BEGIN{FS=“crn: "} {print $2}' | awk '{ print $1 }')
@@ -98,6 +98,7 @@ stages:
       fi
 
       if [ $MH_INSTANCE ]; then
+        # get MH credentials
         bx resource service-key-delete "MH_${APP_NAME}"
         MH_KEY=$(bx resource service-key-create "MH_${APP_NAME}" Manager --instance-name "${MH_INSTANCE}")
 
