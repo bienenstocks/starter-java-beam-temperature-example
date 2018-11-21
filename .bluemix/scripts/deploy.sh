@@ -28,8 +28,7 @@
         bx resource service-key-delete "COS_${APP_NAME}" -f
         COS_KEY=$(bx resource service-key-create "COS_${APP_NAME}" Manager --instance-name "${COS_INSTANCE}" --p {\"HMAC\":true})
 
-        bx plugin repo-plugins -r 'IBM Cloud'
-        bx plugin install cloud-object-storage 
+        bx plugin install cloud-object-storage  -r "Bluemix"
         COS=$(bx resource service-instance "${COS_INSTANCE}")
          COSCRN=$(echo ${COS} | awk 'BEGIN{FS=“crn: "} {print $2}' | awk '{ print $1 }')
          bx cos config —crn $COSCRN
