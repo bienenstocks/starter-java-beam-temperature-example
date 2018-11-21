@@ -51,5 +51,6 @@ stages:
       application: ${APP_NAME}
     script: |
       #!/bin/bash 
+      chmod u+x deploy.sh
       ./deploy.sh
     docker_image: maven:3.5.3-ibmjava
