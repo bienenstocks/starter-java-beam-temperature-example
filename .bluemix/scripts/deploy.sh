@@ -1,5 +1,9 @@
  #!/bin/bash
 
+      wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+      chmod +x ./jq
+      cp jq /usr/bin
+
       if ! [ -x "$(command -v bx)" ]; then
          curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
       fi
@@ -27,33 +31,36 @@
         # get COS credentials
         bx resource service-key-delete "COS_${APP_NAME}" -f
         COS_KEY=$(bx resource service-key-create "COS_${APP_NAME}" Manager --instance-name "${COS_INSTANCE}" --p {\"HMAC\":true})
-
-        bx plugin install cloud-object-storage  -r "Bluemix"
-        COS=$(bx resource service-instance "${COS_INSTANCE}")
-         COSCRN=$(echo ${COS} | awk 'BEGIN{FS=“crn: "} {print $2}' | awk '{ print $1 }')
-         bx cos config —crn $COSCRN
-        bx cos create-bucket --bucket ${APP_NAME} --region us-geo
+        token=$(curl -X "POST" "https://iam.bluemix.net/oidc/token" \
+            -H 'Accept: application/json' \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode "apikey=$(echo ${COS_KEY} | awk 'BEGIN{FS="apikey: "} {print $2}' | awk '{ print $1 }')" \
+            --data-urlencode "response_type=cloud_iam" \
+            --data-urlencode "grant_type=urn:ibm:params:oauth:grant-type:apikey" | jq -r '.access_token')
+        curl -X "PUT" "https://s3-api.us-geo.objectstorage.softlayer.net/${APP_NAME}" \
+            -H "Authorization: Bearer ${token}" \
+            -H "ibm-service-instance-id: $(echo ${COS_KEY} | awk 'BEGIN{FS="resource_instance_id: "} {print $2}' | awk '{ print $1 }')"
 
         echo ",
          \"cos\": {
             \"endpoint\": \"s3-api.us-geo.objectstorage.softlayer.net\",
             \"accessKeyId\": \"$(echo ${COS_KEY} | awk 'BEGIN{FS="access_key_id: "} {print $2}' | awk '{ print $1 }')\",
             \"secretKey\": \"$(echo ${COS_KEY} | awk 'BEGIN{FS="secret_access_key: "} {print $2}' | awk '{ print $1 }')\",
-            \"bucket\": ${APP_NAME},
+            \"bucket\": \"${APP_NAME}\",
             \"filePrefix\": \"prefix\"
          }" >> vcap.json
       fi
 
       if [ $MH_INSTANCE ]; then
         # get MH credentials
-        bx resource service-key-delete "MH_${APP_NAME}" -f
+        bx service key-create "${MH_INSTANCE}" "MH_${APP_NAME}"
+        MH_KEY=$(bx service key-create "${MH_INSTANCE}" "MH_${APP_NAME}")
         MH_KEY=$(bx resource service-key-create "MH_${APP_NAME}" Manager --instance-name "${MH_INSTANCE}")
-
         echo ",
           \"messagehub\": {
             \"user\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="user: "} {print $2}' | awk '{ print $1 }')\",
             \"password\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="password: "} {print $2}' | awk '{ print $1 }')\",
-            \"kafka_brokers_sasl\": \"$(echo ${COS_KEY} | awk 'BEGIN{FS="kafka_brokers_sasl: "} {print $2}' | awk '{ print $1 }')\"
+            \"kafka_brokers_sasl\": \"$(echo ${MH_KEY} | awk 'BEGIN{FS="kafka_brokers_sasl: "} {print $2}' | awk '{ print $1 }')\"
           }" >>vcap.json
       fi
 

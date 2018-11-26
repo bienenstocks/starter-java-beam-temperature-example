@@ -14,9 +14,10 @@ stages:
     build_type: maven
     script: |-
       #!/bin/bash
+      [[ -d "${ARCHIVE_DIR}" ]] || mkdir ${ARCHIVE_DIR}
+      cp .bluemix/scripts/* ${ARCHIVE_DIR}
       export JAVA_HOME=$JAVA8_HOME
       mvn -B -Pstreams-runner package
-      cp .bluemix/scripts/* ${ARCHIVE_DIR}
 - name: Deploy flow to development
   inputs:
   - type: job

@@ -15,17 +15,17 @@
     "type": "object",
     "properties": {
        "sa-instance-name": {
-         "description": "JSON containing the Streaming Analytics Service credentials. This can be found by clicking the Service Credentials link on the left side of the Streaming Analytics Service. Then, click View Credentials to view the JSON.",
+         "description": "Streaming Analytics Service Instance name from IBM Cloud.",
           "type": "string",
           "pattern": "\\S"
        },
        "mh-instance-name": {
-          "description": "JSON containing the Message Hub Service credentials. This can be found by clicking the Service Credentials link on the left side of the Message Hub Service. Then, click View Credentials to view the JSON.",
+          "description": "Event Streams Service Instance name from IBM Cloud.",
           "type": "string",
           "quoted": true
         },
         "cos-instance-name": {
-          "description": "The endpoint can be found by clicking the Endpoint link of the left side of the Cloud Object Storage service. Choose a public endpoint from the chosen region that contains the bucket to write to.",
+          "description": "Cloud Object Storage Service Instance name from IBM Cloud.",
           "type": "string"
         },
         "prod-region": {
@@ -79,7 +79,7 @@
         {
           "type": "text",
           "readonly": false,
-          "title": "Message Hub Service Instance Name",
+          "title": "Event Streams Service Instance Name",
           "key": "mh-instance-name"
        },
        {
